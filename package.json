@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "dev" : "nodemon ."
-
+    "dev": "nodemon ."
   },
   "author": "Miguel Maidana",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.13.1"
+    "apollo-server": "^2.13.1",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.9.16"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
