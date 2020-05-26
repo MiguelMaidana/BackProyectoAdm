@@ -6,7 +6,6 @@ const conectarDB = async ()=>{
         // await mongoose.connect(process.env.DB_MONGO,{
 
         // })
-
         await mongoose.connect(
             'mongodb+srv://mono:mono34512744@cluster0-h6s4u.mongodb.net/CRMGraphQl',
              { useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify : false,useCreateIndex: true });
