@@ -1,0 +1,11 @@
+{
+  "name": "quit",
+  "version": "1.0.0",
+  "description": "Curso de GraphQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Miguel Maidana",
+  "license": "ISC"
+}
