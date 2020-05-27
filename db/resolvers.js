@@ -106,6 +106,42 @@ const resolvers ={
             }catch(error){
                 console.log(error)
             }
+        },
+
+        actualizarProducto : async(_,{id,input})=>{
+
+              // Revisar si el producto existe
+
+              let producto = await Producto.findById(id)
+
+              if(!producto){
+                  throw new Error("Producto NO encontrado")
+              }
+
+              // guardar en la BD
+
+              producto = await Producto.findOneAndUpdate({_id:id}, input,{new:true})
+
+              return producto
+
+              
+  
+
+        },
+        eliminarProducto : async(_,{id})=>{
+             // Revisar si el producto existe
+
+             let producto = await Producto.findById(id)
+
+             if(!producto){
+                 throw new Error("Producto NO encontrado")
+             }
+
+             // eliminar de la bd
+
+            await Producto.findOneAndDelete({_id:id})
+
+             return "Producto Eliminado"
         }
     }
 
