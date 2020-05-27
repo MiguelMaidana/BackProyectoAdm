@@ -7,7 +7,7 @@ const conectarDB = async ()=>{
 
         // })
         await mongoose.connect(
-            'mongodb+srv://mono:mono34512744@cluster0-h6s4u.mongodb.net/CRMGraphQl',
+            'mongodb+srv://mono:mono34512744@cluster0-h6s4u.mongodb.net/CRMGraphQL',
              { useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify : false,useCreateIndex: true });
         console.log("DB Conectada")
     }catch(error){
