@@ -42,6 +42,36 @@ const resolvers ={
             return producto
 
             
+        },
+        obtenerClientes : async()=>{
+            try{
+                const clientes = await Cliente.find({})
+                return clientes
+            }catch(error){
+                console.log(error)
+            }
+        },
+        obtenerClientesVendedor : async(_,{},ctx)=>{
+            try{
+                const clientes = await Cliente.find({vendedor: ctx.usuario.id.toString()})
+                return clientes
+            }catch(error){
+                console.log(error)
+            }
+        },
+        obternerCliente: async(_,{id},ctx)=>{
+            // Revisar si el Cliente existe
+
+            const cliente = await Cliente.findById(id)
+            if(!cliente){
+                throw new Error("El client no existe")
+            }
+            // quien lo creo puede verlo
+            if(cliente.vendedor.toString() !== ctx.usuario.id){
+                throw new Error("No tienes el permiso o credenciales para acceder a este cliente")
+            }
+
+            return cliente
         }
     },
     Mutation :{
@@ -144,7 +174,9 @@ const resolvers ={
 
              return "Producto Eliminado"
         },
-        nuevoCliente: async (_,{input})=>{
+        nuevoCliente: async (_,{input},ctx)=>{
+
+            console.log(ctx)
 
             const {email} = input
             // Verificar si el cliente ya esta registrado
@@ -159,7 +191,7 @@ const resolvers ={
             const nuevoCliente = new Cliente(input)
 
             // asignar el vendedor
-            nuevoCliente.vendedor ="5ecdad1b5d7cde37b07e91c2"
+            nuevoCliente.vendedor = ctx.usuario.id
 
             // Guardar en la BD
             try{                                

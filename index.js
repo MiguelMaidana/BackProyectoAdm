@@ -3,6 +3,7 @@ const typeDefs = require("./db/schema")
 const resolvers = require("./db/resolvers")
 
 const cconectarDB = require("./config/db")
+const jwt = require("jsonwebtoken")
 
 // conectar a la BD
 
@@ -12,7 +13,22 @@ cconectarDB()
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: ({req})=>{
+        //console.log(req.headers["authorization"])
+        const token = req.headers["authorization"] || "";
+        if(token){
+            try{
+                const usuario = jwt.verify(token,"palabrasecreta")
+                //console.log(usuario)
+                return{
+                    usuario
+                }
+            }catch(error){
+                console.log(error)
+            }
+        }
+    }
 })
 
 
