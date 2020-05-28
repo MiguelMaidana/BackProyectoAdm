@@ -90,6 +90,20 @@ const resolvers ={
                 console.log(error)
             }
 
+        },
+        obtenerPedido : async (_,{id},ctx)=>{
+            // Revisar si el pedido existe
+
+            const pedido = await Pedido.findById(id)
+            if(!pedido){
+                throw new Error("El Pedido no existe")
+            }
+
+            // revisar quien lo creo pueda  verlo
+            if(pedido.vendedor.toString() !== ctx.usuario.id){
+                throw new Error("No tienes las credenciales ")
+            }
+            return pedido
         }
     },
     Mutation :{
