@@ -104,6 +104,11 @@ const resolvers ={
                 throw new Error("No tienes las credenciales ")
             }
             return pedido
+        },
+        obtenerPedidosEstado : async (_,{estado},ctx)=>{
+            const pedidos = await Pedido.find({vendedor : ctx.usuario.id, estado})
+
+            return pedidos
         }
     },
     Mutation :{
@@ -321,7 +326,81 @@ const resolvers ={
 
             const resultado = await nuevoPedido.save()
             return resultado
-        }
+        },
+
+        acutualizarPedido : async (_,{id,input},ctx) =>{
+
+            const {cliente } = input
+            // Verificar si el pedido Existe
+
+            const existePedido = await Pedido.findById(id)
+            if(!existePedido){
+                throw new Error ("El pedido No existe")
+            }
+
+            // si el cliente existe
+
+            const existeCliente = await Cliente.findById(cliente)
+            if(!existeCliente){
+                throw new Error ("El Cliente No existe")
+            }
+
+            
+
+            // si el cliente y pedido pertenece al vendedor
+            if (existeCliente.vendedor.toString() !== ctx.usuario.id){
+                throw new Error ("No tiene las credenciales")
+            }
+
+
+
+
+            //Revisar el Stock
+            if(input.pedido){
+                for await ( const articulo of input.pedido){
+                    const {id} = articulo
+                    const producto = await Producto.findById(id)
+    
+                    if(articulo.cantidad > producto.existencia){
+                        throw new Error (`El articulo : ${producto.nombre} excede la cantidad disponible`)
+                    }else{
+                        // restar la cantidad a lo disponible
+    
+                        producto.existencia = producto.existencia - articulo.cantidad
+    
+                        await producto.save()
+                    }
+                }
+            }
+          
+
+            // Guardar El pedido
+
+            const resultado = await Pedido.findOneAndUpdate({_id:id}, input,{new:true})
+            return resultado
+        },
+        eliminarPedido: async(_,{id},ctx)=>{
+            // verificar si existe o no 
+
+            let pedido = await Pedido.findById(id)
+            if(!pedido){
+                throw new Error ("El Pedido no existe")
+            }
+
+            // verificar si el vendedor es quien elimina
+            if(pedido.vendedor.toString() !== ctx.usuario.id){
+                throw new Error("No tienes las credenciales que corresponden para Editar ")
+            }
+
+            // Eliminar Cliente
+
+            await Pedido.findOneAndDelete({_id:id})
+
+            return "Pedido Eliminado"
+
+
+
+       },
     }
 
 }

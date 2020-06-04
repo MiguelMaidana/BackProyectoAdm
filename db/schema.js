@@ -72,8 +72,8 @@ const typeDefs = gql`
     }
     input PedidoInput{
         pedido:[PedidoProductoInput]
-        total : Float!
-        cliente : ID!
+        total : Float
+        cliente : ID
         estado : EstadoPedido
     }
     enum EstadoPedido{
@@ -98,6 +98,7 @@ const typeDefs = gql`
        obtenerPedidos : [Pedido]
        obtenerPediddosVendedor :[Pedido]
        obtenerPedido(id:ID!) : Pedido
+       obtenerPedidosEstado(estado:String!): [Pedido]
    }
 
    type Mutation {
@@ -117,6 +118,8 @@ const typeDefs = gql`
 
        #Pedidos
        nuevoPedido(input:PedidoInput) : Pedido
+       acutualizarPedido(id:ID!, input:PedidoInput) : Pedido
+       eliminarPedido(id:ID!) : String
    }
 `;
 
